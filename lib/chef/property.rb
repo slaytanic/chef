@@ -619,7 +619,15 @@ class Chef
       end
     end
 
-    private
+    #
+    # De-lazify, coerce and validate the given value without storing it.
+    #
+    def transform(resource, value)
+      value = input_to_stored_value(resource, value)
+      stored_value_to_output(resource, value)
+    end
+
+    protected
 
     def exec_in_resource(resource, proc, *args)
       if resource

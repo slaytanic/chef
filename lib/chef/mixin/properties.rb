@@ -298,6 +298,9 @@ class Chef
         raise ArgumentError, "Property #{name} is not defined in class #{self}" if !property
         property.reset(self)
       end
+
+      Boolean = property_type [ true, false ], coerce: proc { |v| !!v }
+      require "chef/property/array_property"
     end
   end
 end

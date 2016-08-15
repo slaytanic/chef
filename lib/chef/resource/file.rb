@@ -50,6 +50,7 @@ class Chef
       allowed_actions :create, :delete, :touch, :create_if_missing
 
       property :path, String, name_property: true, identity: true
+
       property :atomic_update, [ true, false ], desired_state: false, default: lazy { |r| r.docker? && r.special_docker_files?(r.path) ? false : Chef::Config[:file_atomic_update] }
       property :backup, [ Integer, false ], desired_state: false, default: 5
       property :checksum, [ /^[a-zA-Z0-9]{64}$/, nil ]

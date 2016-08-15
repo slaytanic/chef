@@ -162,23 +162,11 @@ class Chef
     # @param arg [Array[Symbol], Symbol] A list of actions (e.g. `:create`)
     # @return [Array[Symbol]] the list of actions.
     #
-    def action(arg = nil)
-      if arg
-        arg = Array(arg).map(&:to_sym)
-        arg.each do |action|
-          validate(
-            { action: action },
-            { action: { kind_of: Symbol, equal_to: allowed_actions } }
-          )
-        end
-        @action = arg
-      else
-        @action
+    property :action, Array, coerce: proc { |v| Array(v).map(&:to_sym) }, callbacks: {
+      "must be one of the allowed actions" => proc do |actions|
+        actions.all? { |action| allowed_actions.include?(action) }
       end
-    end
-
-    # Alias for normal assigment syntax.
-    alias_method :action=, :action
+    }, desired_state: false
 
     #
     # Sets up a notification that will run a particular action on another resource
